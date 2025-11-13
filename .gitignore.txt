@@ -1,0 +1,41 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# Visual Studio / Rider / VSCode
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.suo
+*.tmp
+*.pidb
+*.booproj
+
+# OSごとのゴミファイル
+.DS_Store
+Thumbs.db
+
+# アーカイブとか一時的なもの
+*.zip
+*.tgz
+*.tar.gz
+*.unitypackage
+
+# Rider
+*.sln.iml
+
+# TextMeshPro 生成物（必要なら）
+*.asset.meta
+
+# ビルド成果物
+[Bb]uild/
+[Bb]uilds/
