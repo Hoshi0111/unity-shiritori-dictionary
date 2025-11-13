@@ -29,7 +29,7 @@ This package includes:
 - Unity統合
   - デモシーン 
 
-## 🚀 Installation
+## Installation
 
 1. Clone or download this repository.
 2. Copy the following folders into your Unity project:
@@ -40,7 +40,7 @@ This package includes:
 
 ---
 
-## 🧠 Usage Example
+## Usage Example
 
 ### Basic Lookup
 
