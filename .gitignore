@@ -1,0 +1,41 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+
+# Visual Studio / Rider / VSCode
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.user
+*.unityproj
+*.suo
+*.tmp
+*.pidb
+*.booproj
+
+# OSごとのゴミファイル
+.DS_Store
+Thumbs.db
+
+# アーカイブとか一時的なもの
+*.zip
+*.tgz
+*.tar.gz
+*.unitypackage
+
+# Rider
+*.sln.iml
+
+# ビルド成果物
+[Bb]uild/
+[Bb]uilds/
+
+# Markdownファイルにつく .meta は無視する
+*.md.meta
