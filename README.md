@@ -51,7 +51,7 @@ void Example()
 {
     var dict = ShiritoriDictionary.Instance;
 
-    string reading = "がっこう";
+    string reading = "しりとり";
 
     if (dict.HasReading(reading))
     {
@@ -70,13 +70,18 @@ using Shiritori.Dictionary;
 
 void Example()
 {
+    var dict = ShiritoriDictionary.Instance;
 
+    // 固有名詞OKならtrue/固有名詞NGならfalse
     bool allowProperNoun = false;
-    CompoundFilterMode filter = CompoundFilterMode.AorB;
+    // 複合語を許容するならAll/複合語をある程度制限するならLimited/複合語を禁止するならStrict
+    CompoundFilterMode filter = CompoundFilterMode.All;
 
-    if (dict.HasReadingWithCondition("かみ", allowProperNoun, filter))
+	string reading = "しりとり";
+
+    if (dict.HasReadingWithCondition(reading, allowProperNoun, filter))
     {
-        dict.TryGetSurfaceWithCondition("かみ", out string surface, allowProperNoun, filter);
+        dict.TryGetSurfaceWithCondition(reading, out string surface, allowProperNoun, filter);
         Debug.Log(surface);
     }
 }
