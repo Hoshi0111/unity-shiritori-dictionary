@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using System.Linq;
 using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Shiritori.Dictionary
@@ -16,6 +17,11 @@ namespace Shiritori.Dictionary
 
         // key: reading（ひらがな）
         private readonly Dictionary<string, ShiritoriEntry> dict = new Dictionary<string, ShiritoriEntry>();
+
+        // 最初の文字をkeyとした索引
+        private Dictionary<char, List<ShiritoriEntry>> indexByHead = new Dictionary<char, List<ShiritoriEntry>>();
+
+        private System.Random _random = new System.Random();
 
         private void Awake()
         {
@@ -32,6 +38,7 @@ namespace Shiritori.Dictionary
             }
 
             LoadCsvFromResources();
+            BuildHeadIndex();
         }
 
         /// 開始直後に実行
@@ -95,6 +102,29 @@ namespace Shiritori.Dictionary
             Debug.Log($"ShiritoriDictionary: CSV 読み込み完了。エントリ数 = {dict.Count}");
         }
 
+        private void BuildHeadIndex()
+        {
+            indexByHead.Clear();
+
+            foreach (var kv in dict)
+            {
+                var entry = kv.Value;
+                if (string.IsNullOrEmpty(entry.Reading))
+                    continue;
+
+                char head = entry.Reading[0];
+
+                if (!indexByHead.TryGetValue(head, out var list))
+                {
+                    list = new List<ShiritoriEntry>();
+                    indexByHead[head] = list;
+                }
+
+                list.Add(entry);
+            }
+            Debug.Log($"索引読み込み完了。");
+        }
+
         // ======================
         //    公開 API 群
         // ======================
@@ -125,22 +155,6 @@ namespace Shiritori.Dictionary
         }
 
         /// <summary>
-        /// 読みが一致するエントリの surface を "/" で分割して配列で返す
-        /// </summary>
-        public bool TryGetSurfaces(string reading, out string[] surfaces)
-        {
-            surfaces = null;
-            if (string.IsNullOrEmpty(reading)) return false;
-
-            if (dict.TryGetValue(reading, out var entry))
-            {
-                surfaces = entry.Surface.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
         /// 読みが一致するエントリの surfaceを返り値とする、ない場合はNullで返す
         /// </summary>
         public string GetSurfaceOrNull(string reading)
@@ -150,20 +164,6 @@ namespace Shiritori.Dictionary
                 return entry.Surface;   // 見つかった場合
             }
             return null;               // 見つからなかった場合
-        }
-
-        /// <summary>
-        /// 読みが一致するエントリの surface を "/" で分割して配列で返り値とする、ない場合はNullで返す
-        /// </summary>
-        public string[] GetSurfaceListOrNull(string reading, out string[] surfaces)
-        {
-            surfaces = null;
-            if (dict.TryGetValue(reading, out var entry))
-            {
-                surfaces = entry.Surface.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                return surfaces;
-            }
-            return null;
         }
 
         /// <summary>
@@ -216,27 +216,97 @@ namespace Shiritori.Dictionary
         }
 
         /// <summary>
-        /// 条件付きで surface を取得し配列で返す
+        /// あるひらがなから始まる単語をランダムに一つ選択して返す
         /// </summary>
-        public bool TryGetSurfaceListWithCondition(
-            string reading,
-            out string[] surfaces,
-            bool allowProperNoun = true,
-            CompoundFilterMode compoundFilter = CompoundFilterMode.All)
+        public bool TryGetRandomByInitial(char head, out string reading, out string surface)
         {
-            surfaces = null;
-            if (string.IsNullOrEmpty(reading)) return false;
+            reading = null;
+            surface = null;
 
-            if (!dict.TryGetValue(reading, out var entry))
+            if (!indexByHead.TryGetValue(head, out var list))
                 return false;
 
-            if (!allowProperNoun && entry.Pos2 == "固有名詞")
+            if (list.Count == 0)
                 return false;
 
-            if (!IsCompoundAllowed(entry.Compound, compoundFilter))
+            var choice = list[_random.Next(list.Count)];
+
+            reading = choice.Reading;
+            surface = choice.Surface;
+            return true;
+        }
+
+        /// <summary>
+        /// あるひらがなから始まる単語をリスト化して返す
+        /// </summary>
+        public bool TryGetListByInitial(char head, out List<ShiritoriEntry> entryList)
+        {
+            entryList = null;
+
+            if (!indexByHead.TryGetValue(head, out var list))
                 return false;
 
-            surfaces = entry.Surface.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (list.Count == 0)
+                return false;
+
+            entryList = list;
+            return true;
+        }
+
+        /// <summary>
+        /// 条件をもとにあるひらがなから始まる単語をランダムに一つ選択して返す
+        /// </summary>
+        public bool TryGetRandomByInitialWithCondition(char head, out string reading, out string surface, bool allowProperNoun, CompoundFilterMode filterMode)
+        {
+            reading = null;
+            surface = null;
+
+            if (!indexByHead.TryGetValue(head, out var allList))
+                return false;
+
+            var candidates = dict.Where(kvp =>
+                    kvp.Key.Length > 0 &&
+                    kvp.Key[0] == head &&
+                    (kvp.Value.Pos2 == "普通名詞" || allowProperNoun) &&
+                    !(kvp.Value.Compound == "C" && !(filterMode == CompoundFilterMode.All) || kvp.Value.Compound == "B" && filterMode == CompoundFilterMode.Strict))
+                .Select(kvp => kvp.Value)
+                .ToList();
+
+            if (candidates.Count == 0)
+                return false;
+
+            var choice = candidates[_random.Next(candidates.Count)];
+
+            reading = choice.Reading;
+            surface = choice.Surface;
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// 条件をもとにあるひらがなから始まる単語をランダムに一つ選択して返す
+        /// </summary>
+        public bool TryGetListByInitialWithCondition(char head, out List<ShiritoriEntry> entryList, bool allowProperNoun, CompoundFilterMode filterMode)
+        {
+            entryList = null;
+
+            if (!indexByHead.TryGetValue(head, out var allList))
+                return false;
+
+            var candidates = dict.Where(kvp =>
+                    kvp.Key.Length > 0 &&
+                    kvp.Key[0] == head &&
+                    (kvp.Value.Pos2 == "普通名詞" || allowProperNoun) &&
+                    !(kvp.Value.Compound == "C" && !(filterMode == CompoundFilterMode.All) || kvp.Value.Compound == "B" && filterMode == CompoundFilterMode.Strict))
+                .Select(kvp => kvp.Value)
+                .ToList();
+
+            if (candidates.Count == 0)
+                return false;
+
+            entryList = candidates;
+
             return true;
         }
 
