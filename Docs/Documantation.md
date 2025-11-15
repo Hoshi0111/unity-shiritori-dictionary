@@ -16,13 +16,15 @@ Resourcesに配置した CSV から辞書を読み込み、以下の機能を提
 * Awake() 時に CSV を自動ロード＆インデックス構築
 
 * CSVの各行からShiritoriEntryを生成しdict[reading]に登録
- * cols[0]: reading（ひらがな）
- * cols[1]: surface（表記、複数表記は / で連結済み）
- * cols[2]: pos2（普通名詞 / 固有名詞など）
- * cols[3]: pos3（一般 / 地名 / 人名など）
- * cols[4]: compound（複合度 A/B/C）
+  * cols[0]: reading（ひらがな）
+  * cols[1]: surface（表記、複数表記は / で連結済み）
+  * cols[2]: pos2（普通名詞 / 固有名詞など）
+  * cols[3]: pos3（一般 / 地名 / 人名など）
+  * cols[4]: compound（複合度 A/B/C）
 
 ## 公開API一覧
+
+---
 
 ### HasReading
 
@@ -42,6 +44,8 @@ false：登録されていない、または引数が空・null
 * 想定用途：
 
 プレイヤーの入力した単語が「辞書に存在するか」をまず判定したいとき。
+
+---
 
 ### TryGetSurface
 
@@ -66,6 +70,8 @@ false：見つからず、surface は null のまま
 
 ログ出力やデバッグ表示など。
 
+---
+
 ### GetSurfaceOrNull
 
 * 目的：
@@ -85,6 +91,8 @@ reading(string) - ひらがな読み
 
 if (GetSurfaceOrNull(reading) != null) のように簡潔に判定したい場合。
 
+---
+
 ### HasReadingWithCondition
 
 * 目的：
@@ -98,9 +106,9 @@ allowProperNoun（デフォルト：true）- false の場合、「固有名詞�
 
 compoundFilter（デフォルト：CompoundFilterMode.All）- 複合度レベル（A/B/C）をどこまで許可するか(CompoundFilterMode)
 
- * Strict：A のみ
- * Limited：A/B まで
- * All：A/B/C すべて
+  * Strict：A のみ
+  * Limited：A/B まで
+  * All：A/B/C すべて
 
 * 戻り値：
 
@@ -111,6 +119,8 @@ false：辞書に存在しない、または条件を満たさない
 * 想定用途：
 
 「しりとりで地名や人名を禁止したい」「複合語っぽい単語を弱くしたい」といったゲームルールを実装するとき。
+
+---
 
 ### TryGetSurfaceWithCondition
 
@@ -139,6 +149,8 @@ false：存在しない、または条件を満たさない（surface は null�
 
 対戦相手に提示する単語表示など。
 
+---
+
 ### TryGetRandomByInitial
 
 * 目的：
@@ -164,6 +176,8 @@ CPU プレイヤーの手番で、「前の単語の末尾の文字から始ま�
 
 単語候補をランダムに提示する機能。
 
+---
+
 ### TryGetListByInitial
 
 * 目的：
@@ -186,6 +200,8 @@ false：該当する単語が存在しない（entryList は null）
 デバッグや検証用途で、「ある文字から始まる単語を一覧で確認したい」場合。
 
 「文字数は8文字以下」「指定のひらがなで終わる」など固有の制限を設けて選択する場合。
+
+---
 
 ### TryGetRandomByInitialWithCondition
 
@@ -213,6 +229,8 @@ false：条件を満たす候補が 1 つも存在しない
 * 想定用途：
 
 CPU が「固有名詞を含めるか」「複合度レベルフィルタ」といった制限付きで単語を選ぶ AI を作るとき。
+
+---
 
 ### TryGetListByInitialWithCondition
 
