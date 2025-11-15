@@ -33,13 +33,13 @@ Resourcesに配置した CSV から辞書を読み込み、以下の機能を提
 
 * 引数：
 
-reading - ひらがなによる読み（例：「がっこう」「ねこ」など）(string)
+ * reading - ひらがなによる読み（例：「がっこう」「ねこ」など）(string)
 
 * 戻り値：
 
-true：その読みの単語が辞書に登録されている
+ * true：その読みの単語が辞書に登録されている
 
-false：登録されていない、または引数が空・null
+ * false：登録されていない、または引数が空・null
 
 * 想定用途：
 
@@ -54,15 +54,15 @@ false：登録されていない、または引数が空・null
 
 * 引数：
 
-reading - ひらがな読み(string)
+ * reading - ひらがな読み(string)
 
-surface（out）- 対応する表記（漢字・ひらがななど）。複数候補がある場合は / 区切りで連結されている想定（例：「紙/神」）(string)
+ * surface（out）- 対応する表記（漢字・ひらがななど）。複数候補がある場合は / 区切りで連結されている想定（例：「紙/神」）(string)
 
 * 戻り値：
 
-true：該当する単語が見つかり、surface に値がセットされた
+ * true：該当する単語が見つかり、surface に値がセットされた
 
-false：見つからず、surface は null のまま
+ * false：見つからず、surface は null のまま
 
 * 想定用途：
 
@@ -79,11 +79,11 @@ false：見つからず、surface は null のまま
 
 * 引数：
 
-reading(string) - ひらがな読み
+ * reading(string) - ひらがな読み
 
 * 戻り値：
 
-対応する表記（surface)。存在しない場合は null。(string)
+ * 対応する表記（surface)。存在しない場合は null。(string)
 
 * 想定用途：
 
@@ -100,11 +100,11 @@ if (GetSurfaceOrNull(reading) != null) のように簡潔に判定したい場�
 
 * 引数：
 
-reading - ひらがな読み(string)
+ * reading - ひらがな読み(string)
 
-allowProperNoun（デフォルト：true）- false の場合、「固有名詞」を除外する/true の場合、固有名詞も許可(bool)
+ * allowProperNoun（デフォルト：true）- false の場合、「固有名詞」を除外する/true の場合、固有名詞も許可(bool)
 
-compoundFilter（デフォルト：CompoundFilterMode.All）- 複合度レベル（A/B/C）をどこまで許可するか(CompoundFilterMode)
+ * compoundFilter（デフォルト：CompoundFilterMode.All）- 複合度レベル（A/B/C）をどこまで許可するか(CompoundFilterMode)
 
   * Strict：A のみ
   * Limited：A/B まで
@@ -112,9 +112,9 @@ compoundFilter（デフォルト：CompoundFilterMode.All）- 複合度レベル
 
 * 戻り値：
 
-true：条件を満たす単語が存在する
+ * true：条件を満たす単語が存在する
 
-false：辞書に存在しない、または条件を満たさない
+ * false：辞書に存在しない、または条件を満たさない
 
 * 想定用途：
 
@@ -129,19 +129,19 @@ false：辞書に存在しない、または条件を満たさない
 
 * 引数：
 
-reading - ひらがな読み(string)
+ * reading - ひらがな読み(string)
 
-surface（out）- 条件を満たす場合、その表記がセットされる(string)
+ * surface（out）- 条件を満たす場合、その表記がセットされる(string)
 
-allowProperNoun - 固有名詞を許可するかどうか（HasReadingWithCondition と同じ）(bool)
+ * allowProperNoun - 固有名詞を許可するかどうか（HasReadingWithCondition と同じ）(bool)
 
-compoundFilter - 許可する複合度レベル(CompoundFilterMode)
+ * compoundFilter - 許可する複合度レベル(CompoundFilterMode)
 
 * 戻り値：
 
-true：条件を満たす単語が存在し、surface に値がセットされる
+ * true：条件を満たす単語が存在し、surface に値がセットされる
 
-false：存在しない、または条件を満たさない（surface は null）
+ * false：存在しない、または条件を満たさない（surface は null）
 
 * 想定用途：
 
@@ -158,17 +158,17 @@ false：存在しない、または条件を満たさない（surface は null�
 
 * 引数：
 
-head - 先頭のひらがな 1 文字(char)
+ * head - 先頭のひらがな 1 文字(char)
 
-reading（out）- ランダムに選ばれた単語の読み(string)
+ * reading（out）- ランダムに選ばれた単語の読み(string)
 
-surface（out）- ランダムに選ばれた単語の表記(string)
+ * surface（out）- ランダムに選ばれた単語の表記(string)
 
 * 戻り値：
 
-true：その文字から始まる単語が少なくとも 1 つ存在し、ランダムに取得できた
+ * true：その文字から始まる単語が少なくとも 1 つ存在し、ランダムに取得できた
 
-false：該当する単語が 1 つも存在しない
+ * false：該当する単語が 1 つも存在しない
 
 * 想定用途：
 
@@ -185,15 +185,15 @@ CPU プレイヤーの手番で、「前の単語の末尾の文字から始ま�
 
 * 引数：
 
-head - 先頭のひらがな 1 文字(char)
+ * head - 先頭のひらがな 1 文字(char)
 
-entryList（out）- 見つかった単語の ShiritoriEntry リスト(List<ShiritoriEntry>)
+ * entryList（out）- 見つかった単語の ShiritoriEntry リスト(List<ShiritoriEntry>)
 
 * 戻り値：
 
-true：その文字から始まる単語が 1 件以上存在し、リストが取得できた
+ * true：その文字から始まる単語が 1 件以上存在し、リストが取得できた
 
-false：該当する単語が存在しない（entryList は null）
+ * false：該当する単語が存在しない（entryList は null）
 
 * 想定用途：
 
@@ -210,21 +210,21 @@ false：該当する単語が存在しない（entryList は null）
 
 * 引数：
 
-head - 先頭のひらがな 1 文字(char)
+ * head - 先頭のひらがな 1 文字(char)
 
-reading（out）- ランダムに選ばれた単語の読み(string)
+ * reading（out）- ランダムに選ばれた単語の読み(string)
 
-surface（out）- ランダムに選ばれた単語の表記(string)
+ * surface（out）- ランダムに選ばれた単語の表記(string)
 
-allowProperNoun - 固有名詞を許可するかどうか(bool)
+ * allowProperNoun - 固有名詞を許可するかどうか(bool)
 
-compoundFilter - 許可する複合度レベル(CompoundFilterMode)
+ * compoundFilter - 許可する複合度レベル(CompoundFilterMode)
 
 * 戻り値：
 
-true：条件を満たす候補が存在し、その中から 1 つを選べた
+ * true：条件を満たす候補が存在し、その中から 1 つを選べた
 
-false：条件を満たす候補が 1 つも存在しない
+ * false：条件を満たす候補が 1 つも存在しない
 
 * 想定用途：
 
@@ -239,19 +239,19 @@ CPU が「固有名詞を含めるか」「複合度レベルフィルタ」と�
 
 * 引数：
 
-head - 先頭のひらがな 1 文字(char)
+ * head - 先頭のひらがな 1 文字(char)
 
-entryList（out）- 見つかった単語の ShiritoriEntry リスト(List<ShiritoriEntry>)
+ * entryList（out）- 見つかった単語の ShiritoriEntry リスト(List<ShiritoriEntry>)
 
-allowProperNoun - 固有名詞を許可するかどうか(bool)
+ * allowProperNoun - 固有名詞を許可するかどうか(bool)
 
-compoundFilter - 許可する複合度レベル(CompoundFilterMode)
+ * compoundFilter - 許可する複合度レベル(CompoundFilterMode)
 
 * 戻り値：
 
-true：条件を満たす単語が 1 件以上存在し、リストが取得できた
+ * true：条件を満たす単語が 1 件以上存在し、リストが取得できた
 
-false：条件を満たす単語が存在しない（entryList は null）
+ * false：条件を満たす単語が存在しない（entryList は null）
 
 * 想定用途：
 
