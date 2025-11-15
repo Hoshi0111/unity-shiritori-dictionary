@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using TMPro;
 using Shiritori.Dictionary;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 public class DemoShiritoriSceneController : MonoBehaviour
 {
