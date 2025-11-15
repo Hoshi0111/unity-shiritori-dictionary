@@ -13,6 +13,8 @@ This package includes:
 - Unity-ready module + Demo scene
 - Python script to regenerate the dictionary from SudachiDict
 
+詳しい API 説明は [Docs/ShiritoriDictionary.md](Docs/Documantation.md) を参照してください。
+
 ---
 
 ## Features
@@ -86,6 +88,26 @@ void Example()
     {
         dict.TryGetSurfaceWithCondition(reading, out string surface, allowProperNoun, filter);
         Debug.Log(surface);
+    }
+}
+```
+
+### Based Get Words
+
+```csharp
+void Example()
+{
+    var dict = ShiritoriDictionary.Instance;
+
+    //"あ"から始まる単語をランダムに一つ選択
+    char init = "あ";
+
+    if (dict.TryGetRandomByInitial(
+            init, 
+            out string nextReading, 
+            out string nextSurface))
+    {
+        Debug.Log($"次の単語：{nextSurface} ({nextReading})");
     }
 }
 ```
