@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using System.Linq;
 using static UnityEngine.EventSystems.EventTrigger;
+using System.Diagnostics.Tracing;
 
 namespace Shiritori.Dictionary
 {
@@ -11,6 +12,9 @@ namespace Shiritori.Dictionary
     {
         // Resources 内の CSV のパス
         private const string CsvResourcePath = "Datasets/best_shiritori_words";
+
+        // Resources 内の txt ファイルのパス
+        private const string NgWordResourcePath = "UserData/ng_words";
 
         // Singleton 的にアクセスしたい場合用
         public static ShiritoriDictionary Instance { get; private set; }
@@ -123,6 +127,46 @@ namespace Shiritori.Dictionary
                 list.Add(entry);
             }
             Debug.Log($"索引読み込み完了。");
+
+            // NGワードを除外する
+            var ngFile = Resources.Load<TextAsset>(NgWordResourcePath);
+
+            if(ngFile == null)
+            {
+                Debug.LogWarning($"ShiritoriDictionary: NGワードファイルは見つかりませんでした");
+                return;
+            }
+
+            var ngWords = ngFile.text.Split("\r");
+
+            // NGワードセットを構築
+            var ngSet = new HashSet<string>();
+
+            foreach (var word in ngWords)
+            {
+                var trimmed = word.Trim();
+                if(!string.IsNullOrEmpty(trimmed))
+                {
+                    ngSet.Add(trimmed);
+                }
+            }
+
+            // NGワードを索引から除外
+            foreach (var kv in indexByHead)
+            {
+                var list = kv.Value;
+                list.RemoveAll(entry => ngSet.Contains(entry.Reading));
+            }
+
+            Debug.Log($"索引データベースからNGワード除外完了。NGワード数:{ngSet.Count}");
+
+            // もし検索データセットからも消したい場合以下を有効化
+            //foreach (var ngWord in ngSet)
+            //{
+            //    dict.Remove(ngWord);
+            //}
+            //Debug.Log($"検索データベースからNGワード除外完了");
+
         }
 
         // ======================
